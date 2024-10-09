@@ -1,0 +1,11 @@
+socket.io: version 4.8.0
+
+myip.opendns.com
+
+Weather API Key
+======================
+88472c347d732f46348629392d42c1bb
+
+
+http://api.openweathermap.org/data/2.5/weather?q=London,uk&APPID=88472c347d732f46348629392d42c1bb
+

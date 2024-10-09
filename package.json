@@ -1,0 +1,32 @@
+{
+  "name": "assignment1",
+  "version": "1.0.0",
+  "description": "Order Management And Status App",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "iplocation": "^7.2.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.8.0",
+    "mongoose": "^8.4.5",
+    "node-ipinfo": "^3.5.3",
+    "node-localstorage": "^3.0.5",
+    "node-public-ip": "^1.0.2",
+    "nodemailer": "^6.9.14",
+    "nodemon": "^3.1.4",
+    "public-ip": "^7.0.1",
+    "request": "^2.88.2",
+    "socket.io": "^4.8.0"
+  }
+}

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script>
+        var socket = io();
+
+        socket.on('chat', function (data) {
+            var msg = data.nick+':'+data.time+'@'+data.location+':'+data.message;
+            $('textarea').val($('textarea').val()+msg+'\n'); 
+        });
+
+        socket.on('userlist', (data)=>{
+          document.getElementById('activeuser').innerHTML= "";
+          data.map((item)=>{
+              $('#activeuser').append(`UserId: <strong>${item}<strong><br/>`)
+          })
+          let total = data.length;
+          document.getElementById('listu').innerHTML= total
+          $('b').val(total);
+        })
+
+        // Handle UI
+        $(function() {
+            // Set nickname
+            $('#nick').on('click', function() {
+                socket.emit('nick', $('#nickText').val());
+            });
+            // Send chat message
+            $('#chat').on('click', function() {
+                socket.emit('chat', {
+                    message:$('#chatText').val(),
+                    time: new Date().toLocaleString()
+                });
+            });
+        });
+
+        var uiusers = sessionStorage.getItem('users');
+        //console.log(uiusers)
+    </script>
+    <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css" />
+    <title>Certification Project</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+
+    <nav class="navbar navbar-expand-sm bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+              <img src="./logo.png" alt="Logo" style="width:40px;" class="rounded-pill"> 
+            </a>
+        </div>        
+        <div class="container-fluid">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="http://localhost:3000/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="http://localhost:3000/sports">Sports</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="http://localhost:3000/contactus">Contact us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="http://localhost:3000/aboutus">About us</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="d-flex justify-content-center">
+      <div class="d-flex flex-column bd-highlight mb-3">
+        <div class="mb-3 mt-3">
+          <div class="d-flex p-4 bg-secondary text-white">
+            <div class="p-2 bg-info">Flex item 1</div>
+            <div class="p-2 bg-warning">Flex item 2</div>
+            <div class="p-2 bg-primary">Flex item 3</div>
+            <div class="p-2 bg-info">Flex item 3</div>
+          </div>
+        </div>
+        <div class="mb-3">
+          Chat messages
+        </div>
+        <div class="mb-3">
+          <h1>Chat with other Update24x7 Clients</h1>
+          <p>
+              <input id="nickText" type="text"/>
+              <button id="nick" class="btn btn-warning">Set UserName</button>
+          </p>
+          <textarea style="height:300px;width:500px;"></textarea>
+          <p>
+              <input id="chatText" type="text"/>
+              <button id="chat" class="btn btn-success">Send Message</button>
+          </p>
+          <h2>Active User: <b id="listu"></b></h2>
+          <p id="activeuser">  
+              
+          </p>        
+        </div>
+      </div>  
+    </div>
+    <footer>
+        <div class="d-flex justify-content-center">Author: KIBA Martial &copy;2024<div>
+    </footer>
+  </body>
+</html>

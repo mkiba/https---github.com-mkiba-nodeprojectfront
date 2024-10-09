@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script>
+        var socket = io();
+
+        socket.on('chat', function (data) {
+            var msg = data.nick+':'+data.time+'@'+data.location+':'+data.message;
+            $('textarea').val($('textarea').val()+msg+'\n'); 
+        });
+
+        socket.on('userlist', (data)=>{
+          document.getElementById('activeuser').innerHTML= "";
+          data.map((item)=>{
+              $('#activeuser').append(`UserId: <strong>${item}<strong><br/>`)
+          })
+          let total = data.length;
+          document.getElementById('listu').innerHTML= total
+          $('b').val(total);
+        })
+
+        // Handle UI
+        $(function() {
+            // Set nickname
+            $('#nick').on('click', function() {
+                socket.emit('nick', $('#nickText').val());
+            });
+            // Send chat message
+            $('#chat').on('click', function() {
+                socket.emit('chat', {
+                    message:$('#chatText').val(),
+                    time: new Date().toLocaleString()
+                });
+            });
+        });
+
+        var uiusers = sessionStorage.getItem('users');
+        //console.log(uiusers)
+    </script>
+    <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css" />
+    <title>Certification Project</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+
+    <nav class="navbar navbar-expand-sm bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+              <img src="./logo.png" alt="Logo" style="width:40px;" class="rounded-pill"> 
+            </a>
+        </div>        
+        <div class="container-fluid">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="http://localhost:3000/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="http://localhost:3000/sports">Sports</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="http://localhost:3000/contactus">Contact us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="http://localhost:3000/aboutus">About us</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="d-flex justify-content-center">
+      <div class="d-flex flex-column bd-highlight mb-3">
+        <div class="mb-3 mt-3">
+          <div class="d-flex p-3 bg-secondary text-white">
+            <div class="mt-4 p-2 text-white bg-warning rounded">
+              <h1>Weater</h1>
+              <p>Description: <%= weather.description %></p>
+              <p>icon: <%= weather.icon %></p>
+            </div>
+            <div class="mt-4 p-2 text-white bg-primary rounded">
+              <h1>Temperature</h1>
+              <p>Min: <%= weather.temp_min %></p>
+              <p>Max: <%= weather.temp_max %></p>
+            </div>
+            <div class="mt-4 p-2 text-white bg-info rounded">
+              <h1>City</h1>
+              <p><%= weather.city %></p>
+            </div>
+          </div>
+        </div>
+        <div class="mb-3">
+
+          <div id="demo" class="carousel slide" data-bs-ride="carousel">
+
+            <!-- Indicators/dots -->
+            <div class="carousel-indicators">
+              <button type="button" data-bs-target="#demo" data-bs-slide-to="0" class="active"></button>
+              <button type="button" data-bs-target="#demo" data-bs-slide-to="1"></button>
+              <button type="button" data-bs-target="#demo" data-bs-slide-to="2"></button>
+            </div>
+          
+            <!-- The slideshow/carousel -->
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src=<%= news[0].urltoimage %> alt="Los Angeles" class="d-block w-100">
+              </div>
+              <div class="carousel-item">
+                <img src=<%= news[1].urltoimage %> alt="Chicago" class="d-block w-100">
+              </div>
+              <div class="carousel-item">
+                <img src=<%= news[2].urltoimage %> alt="New York" class="d-block w-100">
+              </div>
+            </div>
+          
+            <!-- Left and right controls/icons -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
+              <span class="carousel-control-next-icon"></span>
+            </button>
+          </div>
+        </div>
+        <div class="mb-3">
+          <h1>Chat with other Update24x7 Clients</h1>
+          <p>
+              <input id="nickText" type="text"/>
+              <button id="nick" class="btn btn-warning">Set UserName</button>
+          </p>
+          <textarea style="height:300px;width:500px;"></textarea>
+          <p>
+              <input id="chatText" type="text"/>
+              <button id="chat" class="btn btn-success">Send Message</button>
+          </p>
+          <h2>Active User: <b id="listu"></b></h2>
+          <p id="activeuser">  
+              
+          </p>        
+        </div>
+      </div>  
+    </div>
+    <footer>
+        <div class="d-flex justify-content-center">Author: KIBA Martial &copy;2024<div>
+    </footer>
+  </body>
+</html>
